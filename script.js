@@ -45,20 +45,46 @@ const generateRGB=()=>{
   return `rgba(${randomInt(0,255)},${randomInt(0,255)},${randomInt(0,255)}, ${randomInt(0,100)/100})`
 }
 //eventlisteners:
+
+
+// document.querySelectorAll('.nav__link').forEach(el=>{
+//   el.addEventListener('click', function(e){ // with arrow fn one cannot use 'this', so let's use this kind of fn
+//     e.preventDefault();
+//     // const id = this.href;// it returns whole link (with http://local.....etc + #section--1)
+//     const id = this.getAttribute('href'); //-> it returns sth like '#section--1'. PERFECT SELECTOR. LET'S USE IT!
+//     document.querySelector(id).scrollIntoView({behavior :'smooth'})
+//   })
+// })// here we create a lot of same functions, not the best solution. let's create one in parent element that knows
+//who(which chilid of him) is the event trigger (e.target) and use function that uses particular elem in event handling:
+
+document.querySelector('.nav__links').addEventListener('click', function(e){
+  e.preventDefault();
+  const triggerer = e.target;
+  // console.log(triggerer);
+  if(!triggerer.classList.contains('nav__link')) return; // if it's not the kind of child we are looking for, don't continue the fn
+  const dest = triggerer.getAttribute('href');
+  // console.log(dest);
+  document.querySelector(dest).scrollIntoView({behavior: 'smooth'})
+})
+
+
+
+
+document.querySelector('.header').addEventListener('click', function(){
+  // console.log('.header')
+  setInterval(()=>{ this.style.backgroundColor=`rgba(${randomInt(0,255)}, 124, 244, ${randomInt(0,100)/100})`}, 4000)
+}, true)
 document.querySelector('.nav').addEventListener('click', function(){
-  setInterval(()=>{this.style.backgroundColor=`rgba(${randomInt(100, 120)}, ${randomInt(200, 120)}, ${randomInt(300, 120)}, ${randomInt(0,100)/100})`}, 200)
-  console.log('.nav')
+  setInterval(()=>{this.style.backgroundColor=`rgba(${randomInt(100, 120)}, ${randomInt(200, 120)}, ${randomInt(300, 120)}, ${randomInt(0,100)/100})`}, 2000)
+  // console.log('.nav')
 }, true)
 document.querySelector('.nav__logo').addEventListener('click', function(e){
-  setInterval(()=>{this.style.backgroundColor=generateRGB()}, 350)
-  console.log('.nav__logo')
+  setInterval(()=>{this.style.backgroundColor=generateRGB()}, 3500);
+  e.stopPropagation();
+  // console.log('.nav__logo')
 
-  // e.stopPropagation(); // stops the propagation (handling event in bubbling phase where e.target!==e.currentTarget)
+  e.stopPropagation(); // stops the propagation (handling event in bubbling phase where e.target!==e.currentTarget)
 })
-document.querySelector('.header').addEventListener('click', function(){
-  console.log('.header')
-  setInterval(()=>{ this.style.backgroundColor=`rgba(${randomInt(0,255)}, 124, 244, ${randomInt(0,100)/100})`}, 400)
-}, true)
 
 
 btnScrollTo.addEventListener('click', (e) => {
@@ -112,5 +138,3 @@ cookieMessage.style.fontSize = parseFloat(getComputedStyle(cookieMessage).fontSi
 //editing attributes:
 
 //const logo = document.querySelector('.nav__logo');
-console.log(logo.alt);
-console.log(logo.src);
