@@ -15,7 +15,7 @@ const section1 = document.querySelector('#section--1')
 const section2 = document.querySelector('#section--2')
 const section3 = document.querySelector('#section--3')
 
-
+const logo = document.querySelector('.nav__logo')
 cookieMessage.classList.add('cookie-message');
 cookieMessage.innerHTML = `we use cookies for better analytics <button class="btn btn--close--cookie">OK</button>`;
 
@@ -38,7 +38,28 @@ const closeModal = function () {
   modal.classList.add('hidden');
   overlay.classList.add('hidden');
 };
+const randomInt = (min, max) => {
+  return Math.floor(Math.random()*(max-min+1));
+}
+const generateRGB=()=>{
+  return `rgba(${randomInt(0,255)},${randomInt(0,255)},${randomInt(0,255)}, ${randomInt(0,100)/100})`
+}
 //eventlisteners:
+document.querySelector('.nav').addEventListener('click', function(){
+  setInterval(()=>{this.style.backgroundColor=`rgba(${randomInt(100, 120)}, ${randomInt(200, 120)}, ${randomInt(300, 120)}, ${randomInt(0,100)/100})`}, 200)
+  console.log('.nav')
+}, true)
+document.querySelector('.nav__logo').addEventListener('click', function(e){
+  setInterval(()=>{this.style.backgroundColor=generateRGB()}, 350)
+  console.log('.nav__logo')
+
+  // e.stopPropagation(); // stops the propagation (handling event in bubbling phase where e.target!==e.currentTarget)
+})
+document.querySelector('.header').addEventListener('click', function(){
+  console.log('.header')
+  setInterval(()=>{ this.style.backgroundColor=`rgba(${randomInt(0,255)}, 124, 244, ${randomInt(0,100)/100})`}, 400)
+}, true)
+
 
 btnScrollTo.addEventListener('click', (e) => {
   const scrollX = window.scrollX;
@@ -90,6 +111,6 @@ cookieMessage.style.fontSize = parseFloat(getComputedStyle(cookieMessage).fontSi
 
 //editing attributes:
 
-const logo = document.querySelector('.nav__logo');
+//const logo = document.querySelector('.nav__logo');
 console.log(logo.alt);
 console.log(logo.src);
