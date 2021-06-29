@@ -2,7 +2,7 @@
 
 ///////////////////////////////////////
 // Modal window
-
+const footer = document.querySelector('.footer');
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
@@ -62,7 +62,7 @@ function changeOpacity(e){
 // })
 
 
-header.before(cookieMessage);
+footer.after(cookieMessage);
 // header.insertAdjacentHTML('beforebegin', 'we use cookies for better analytics <button class="btn btn--close--cookie">OK</button>')
 document.querySelector('.btn--close--cookie').addEventListener('click', () => {
   cookieMessage.remove();
@@ -94,17 +94,38 @@ const generateRGB=()=>{
 
 
 //eventlisteners:
-window.addEventListener('scroll', (e)=>{
-  const navbar = document.querySelector('.nav')
-  // window.scrollY>100 && navbar.classList.add('sticky')
-  // window.scrollY<100 && navbar.classList.remove('sticky')
-  // e.scrollY>100 && navbar.classList.add('sticky')
-  // e.scrollY<100 && navbar.classList.remove('sticky')
-  const section1coords = section1.getBoundingClientRect();
-  console.log(section1coords)
-  if (window.scrollY>section1coords.top) navbar.classList.add('sticky');
-  else navbar.classList.remove('sticky')
-})
+// window.addEventListener('scroll', (e)=>{
+//   const navbar = document.querySelector('.nav')
+//   // window.scrollY>100 && navbar.classList.add('sticky')
+//   // window.scrollY<100 && navbar.classList.remove('sticky')
+//   // e.scrollY>100 && navbar.classList.add('sticky')
+//   // e.scrollY<100 && navbar.classList.remove('sticky')
+//   const section1coords = section1.getBoundingClientRect();
+//   // console.log(section1coords)
+//   if (window.scrollY>section1coords.top) {
+//     navbar.classList.add('sticky');
+//     // cookieMessage.classList.add('sticky');
+//   }
+//   else navbar.classList.remove('sticky')
+// }) 
+/// or we can use intersection observer API:
+const obsCallback=(entries, observer)=>{
+  // console.log(section1.getBoundingClientRect()); // it's inside IntersectionObserverEntry.boundingClientRect
+  //console.log(section1.getClientRects()) // it gives same result as getBoundingClientRect()
+  const [entry] = entries;
+  const nav = document.querySelector('.nav');
+  if(!entry.isIntersecting) nav.classList.add('sticky')
+  else nav.classList.remove('sticky')
+  entries.forEach(entry=>{console.log(entry)})
+}
+const obsOptions={
+  root: null, //=> root=viewport
+  threshold: 0,
+  rootMargin: `-${document.querySelector('.nav').getBoundingClientRect().height}px`
+}
+
+const observer = new IntersectionObserver(obsCallback, obsOptions);
+observer.observe(header);
 
 document.querySelector('.nav').addEventListener('mouseover', changeOpacity.bind(0.5))
 document.querySelector('.nav').addEventListener('mouseout', changeOpacity.bind(1));
