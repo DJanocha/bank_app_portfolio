@@ -14,10 +14,27 @@ const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1')
 const section2 = document.querySelector('#section--2')
 const section3 = document.querySelector('#section--3')
+const tabs = document.querySelectorAll('.operations__tab')
+const tabsContainer = document.querySelector('.operations__tab-container')
+const operationsContents = document.querySelectorAll('.operations__content');
+
 
 const logo = document.querySelector('.nav__logo')
 cookieMessage.classList.add('cookie-message');
 cookieMessage.innerHTML = `we use cookies for better analytics <button class="btn btn--close--cookie">OK</button>`;
+
+tabsContainer.addEventListener('click', function(e){
+  const triggerer = e.target.classList.contains('btn')? e.target : e.target.closest('.operations__tab')
+  if (!triggerer) return;
+  const index=triggerer.getAttribute('data-tab')
+  console.log(index)
+  tabs.forEach((tab)=>{tab.classList.remove('operations__tab--active')})
+  operationsContents.forEach(oc=>{oc.classList.remove('operations__content--active')})
+  document.querySelector(`.operations__tab--${index}`).classList.add('operations__tab--active')
+  document.querySelector(`.operations__content--${index}`).classList.add('operations__content--active')
+  
+});
+
 
 header.before(cookieMessage);
 // header.insertAdjacentHTML('beforebegin', 'we use cookies for better analytics <button class="btn btn--close--cookie">OK</button>')
@@ -44,6 +61,16 @@ const randomInt = (min, max) => {
 const generateRGB=()=>{
   return `rgba(${randomInt(0,255)},${randomInt(0,255)},${randomInt(0,255)}, ${randomInt(0,100)/100})`
 }
+//DOM TRAVERSING:
+
+const h1=document.querySelector('h1').parentElement.parentElement;
+const i=[...h1.children];
+i.forEach(el=>{
+  el.style.opacity=0.5;
+})
+
+
+
 //eventlisteners:
 
 
