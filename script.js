@@ -23,17 +23,44 @@ const logo = document.querySelector('.nav__logo')
 cookieMessage.classList.add('cookie-message');
 cookieMessage.innerHTML = `we use cookies for better analytics <button class="btn btn--close--cookie">OK</button>`;
 
-tabsContainer.addEventListener('click', function(e){
-  const triggerer = e.target.classList.contains('btn')? e.target : e.target.closest('.operations__tab')
-  if (!triggerer) return;
-  const index=triggerer.getAttribute('data-tab')
-  console.log(index)
-  tabs.forEach((tab)=>{tab.classList.remove('operations__tab--active')})
-  operationsContents.forEach(oc=>{oc.classList.remove('operations__content--active')})
-  document.querySelector(`.operations__tab--${index}`).classList.add('operations__tab--active')
-  document.querySelector(`.operations__content--${index}`).classList.add('operations__content--active')
-  
-});
+
+function changeOpacity(e){
+  if (!e.target.classList.contains('nav__link')) return;
+  // console.log('contains')
+  const closeNav = e.target.closest('.nav')
+  const siblings =closeNav.querySelectorAll('.nav__link');
+  const logo = closeNav.querySelector('.nav__logo');
+  const elements =[...siblings, logo]
+  elements.forEach((s)=>{
+    // if(s!=e.target) 
+    if(e.target!== s) s.style.opacity=this;
+  });
+  // logo.style.opacity=0.5;
+  // e.target.style.opacity=opacity
+};
+document.querySelector('.nav').addEventListener('mouseover', changeOpacity.bind(0.5))
+document.querySelector('.nav').addEventListener('mouseout', changeOpacity.bind(1));
+
+
+// document.querySelector('.nav').addEventListener('mouseover', e=>{
+//   if (!e.target.classList.contains('nav__link')) return;
+
+//   const closeNav = e.target.closest('.nav')
+//   const siblings =closeNav.querySelectorAll('.nav__link');
+//   const logo = closeNav.querySelector('.nav__logo');
+//   const elements =[...siblings, logo]
+//   elements.forEach((s)=>{
+//     // if(s!=e.target) 
+//     s.style.opacity=0.5;
+//   });
+//   // logo.style.opacity=0.5;
+//   e.target.style.opacity=1
+// });
+
+// document.querySelector('.nav').addEventListener('mouseout', (e)=>{
+//   const interestElements=[...e.target.closest('.nav').querySelectorAll('.nav__link'), e.target.closest('.nav').querySelector('.nav__logo')];
+//   interestElements.forEach(el=> {el.style.opacity=1})
+// })
 
 
 header.before(cookieMessage);
@@ -63,16 +90,24 @@ const generateRGB=()=>{
 }
 //DOM TRAVERSING:
 
-const h1=document.querySelector('h1').parentElement.parentElement;
-const i=[...h1.children];
-i.forEach(el=>{
-  el.style.opacity=0.5;
-})
+
 
 
 
 //eventlisteners:
 
+
+tabsContainer.addEventListener('click', function(e){
+  const triggerer = e.target.classList.contains('btn')? e.target : e.target.closest('.operations__tab')
+  if (!triggerer) return;
+  const index=triggerer.getAttribute('data-tab')
+  console.log(index)
+  tabs.forEach((tab)=>{tab.classList.remove('operations__tab--active')})
+  operationsContents.forEach(oc=>{oc.classList.remove('operations__content--active')})
+  document.querySelector(`.operations__tab--${index}`).classList.add('operations__tab--active')
+  document.querySelector(`.operations__content--${index}`).classList.add('operations__content--active')
+  
+});
 
 // document.querySelectorAll('.nav__link').forEach(el=>{
 //   el.addEventListener('click', function(e){ // with arrow fn one cannot use 'this', so let's use this kind of fn
@@ -96,22 +131,22 @@ document.querySelector('.nav__links').addEventListener('click', function(e){
 
 
 
+//too much pain in the ass to work with socommented ;)
+// document.querySelector('.header').addEventListener('click', function(){
+//   // console.log('.header')
+//   setInterval(()=>{ this.style.backgroundColor=`rgba(${randomInt(0,255)}, 124, 244, ${randomInt(0,100)/100})`}, 4000)
+// }, true)
+// document.querySelector('.nav').addEventListener('click', function(){
+//   setInterval(()=>{this.style.backgroundColor=`rgba(${randomInt(100, 120)}, ${randomInt(200, 120)}, ${randomInt(300, 120)}, ${randomInt(0,100)/100})`}, 2000)
+//   // console.log('.nav')
+// }, true)
+// document.querySelector('.nav__logo').addEventListener('click', function(e){
+//   setInterval(()=>{this.style.backgroundColor=generateRGB()}, 3500);
+//   e.stopPropagation();
+//   // console.log('.nav__logo')
 
-document.querySelector('.header').addEventListener('click', function(){
-  // console.log('.header')
-  setInterval(()=>{ this.style.backgroundColor=`rgba(${randomInt(0,255)}, 124, 244, ${randomInt(0,100)/100})`}, 4000)
-}, true)
-document.querySelector('.nav').addEventListener('click', function(){
-  setInterval(()=>{this.style.backgroundColor=`rgba(${randomInt(100, 120)}, ${randomInt(200, 120)}, ${randomInt(300, 120)}, ${randomInt(0,100)/100})`}, 2000)
-  // console.log('.nav')
-}, true)
-document.querySelector('.nav__logo').addEventListener('click', function(e){
-  setInterval(()=>{this.style.backgroundColor=generateRGB()}, 3500);
-  e.stopPropagation();
-  // console.log('.nav__logo')
-
-  e.stopPropagation(); // stops the propagation (handling event in bubbling phase where e.target!==e.currentTarget)
-})
+//   e.stopPropagation(); // stops the propagation (handling event in bubbling phase where e.target!==e.currentTarget)
+// })
 
 
 btnScrollTo.addEventListener('click', (e) => {
