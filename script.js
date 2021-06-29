@@ -38,8 +38,7 @@ function changeOpacity(e){
   // logo.style.opacity=0.5;
   // e.target.style.opacity=opacity
 };
-document.querySelector('.nav').addEventListener('mouseover', changeOpacity.bind(0.5))
-document.querySelector('.nav').addEventListener('mouseout', changeOpacity.bind(1));
+
 
 
 // document.querySelector('.nav').addEventListener('mouseover', e=>{
@@ -95,8 +94,20 @@ const generateRGB=()=>{
 
 
 //eventlisteners:
+window.addEventListener('scroll', (e)=>{
+  const navbar = document.querySelector('.nav')
+  // window.scrollY>100 && navbar.classList.add('sticky')
+  // window.scrollY<100 && navbar.classList.remove('sticky')
+  // e.scrollY>100 && navbar.classList.add('sticky')
+  // e.scrollY<100 && navbar.classList.remove('sticky')
+  const section1coords = section1.getBoundingClientRect();
+  console.log(section1coords)
+  if (window.scrollY>section1coords.top) navbar.classList.add('sticky');
+  else navbar.classList.remove('sticky')
+})
 
-
+document.querySelector('.nav').addEventListener('mouseover', changeOpacity.bind(0.5))
+document.querySelector('.nav').addEventListener('mouseout', changeOpacity.bind(1));
 tabsContainer.addEventListener('click', function(e){
   const triggerer = e.target.classList.contains('btn')? e.target : e.target.closest('.operations__tab')
   if (!triggerer) return;
@@ -155,7 +166,7 @@ btnScrollTo.addEventListener('click', (e) => {
   const clientWidth = document.documentElement.clientWidth;
   const clientHeight = document.documentElement.clientHeight;
   const section1coords = e.target.getBoundingClientRect();
-  section1.getBoundingClientRect();
+//  section1.getBoundingClientRect();
 
   // `pageXOffset: ${window.pageXOffset}` // window.scrollX  is the same as window.pageXoffset and same with Y
   // `pageYOffset: ${window.pageYOffset}`
