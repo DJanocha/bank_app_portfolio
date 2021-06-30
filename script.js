@@ -90,7 +90,8 @@ const generateRGB = () => {
 
 
 //slider:
-
+function slider () {
+  
 const leftButton = document.querySelector('.slider__btn--left')
 const rightButton = document.querySelector('.slider__btn--right')
 const slides = document.querySelectorAll('.slide');
@@ -109,20 +110,14 @@ const createDots = () => {
 }
 let currentSlide = 0;
 function goToSlide(number) {
-  // console.log(slides[number]);
-  //let's set all values to the defaults ones:
   currentSlide = number;
   slides.forEach((elem, index) => (
     elem.style.transform = `translateX(${(index-currentSlide) * 100}%)`
   ))
   console.log(dotsContainer)
-  //deactive all of dots:
   console.log(document.querySelectorAll('.dots__dot'))
   document.querySelectorAll('.dots__dot').forEach(dot=>{dot.classList.remove('dots__dot--active')});
   document.querySelector(`.dots__dot[data-slide="${number}"]`).classList.add('dots__dot--active')
-  // dotsContainer.children.classList.remove('dots__dot--active')
-  //and activate only the needed one:
-  // dotsContainer.children[number].classList.add('dots__dots--active');
 }
 const nextSlide = () => {
   currentSlide++;
@@ -139,6 +134,8 @@ goToSlide(0);
 leftButton.addEventListener('click', prevSlide)
 rightButton.addEventListener('click', nextSlide)
 
+}
+slider();
 
 // intersection observer API // scrolling effects:
 
@@ -176,18 +173,15 @@ lazyImages.forEach(li => lazyObserver.observe(li));
 // }) 
 /// or we can use intersection observer API:
 const navCallback = (entries, observer) => {
-  // console.log(section1.getBoundingClientRect()); // it's inside IntersectionObserverEntry.boundingClientRect
-  //console.log(section1.getClientRects()) // it gives same result as getBoundingClientRect()
   const [entry] = entries;
   const nav = document.querySelector('.nav');
   if (!entry.isIntersecting) nav.classList.add('sticky')
   else nav.classList.remove('sticky')
-  // entries.forEach(entry=>{console.log(entry)})
 }
 const navOptions = {
   root: null, //=> root=viewport
   threshold: 0,
-  rootMargin: `-${document.querySelector('.nav').getBoundingClientRect().height}px`
+  rootMargin: `-${document.querySelector('.nav').getBoundingClientRect().height}px` // endofheader-navbarheight
 }
 
 const navObserver = new IntersectionObserver(navCallback, navOptions);
@@ -280,17 +274,13 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 
 
 btnScrollTo.addEventListener('click', (e) => {
-  const scrollX = window.scrollX;
-  const scrollY = window.scrollY;
-  const clientWidth = document.documentElement.clientWidth;
-  const clientHeight = document.documentElement.clientHeight;
-  const section1coords = e.target.getBoundingClientRect();
-  //  section1.getBoundingClientRect();
-
-  // `pageXOffset: ${window.pageXOffset}` // window.scrollX  is the same as window.pageXoffset and same with Y
-  // `pageYOffset: ${window.pageYOffset}`
-  console.log(section1coords)
-  console.log(e.target.getBoundingClientRect())
+  // const scrollX = window.scrollX;
+  // const scrollY = window.scrollY;
+  // const clientWidth = document.documentElement.clientWidth;
+  // const clientHeight = document.documentElement.clientHeight;
+  // const section1coords = e.target.getBoundingClientRect();
+  // console.log(section1coords)
+  // console.log(e.target.getBoundingClientRect())
 
   // window.scrollTo(section1coords.left + scrollX, section1coords.top+ scrollY) or if you want to do it smoothly, u have to pass 
   //an object with 'left', 'top', and 'behavior' properties/attributes
@@ -303,10 +293,6 @@ btnScrollTo.addEventListener('click', (e) => {
   section1.scrollIntoView({ behavior: 'smooth' })
 })
 
-
-
-// for (let i = 0; i < btnsOpenModal.length; i++)
-//   btnsOpenModal[i].addEventListener('click', openModal);
 btnsOpenModal.forEach(mod => {
   mod.addEventListener('click', openModal)
 })
