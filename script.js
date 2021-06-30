@@ -87,7 +87,58 @@ const randomInt = (min, max) => {
 const generateRGB = () => {
   return `rgba(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)}, ${randomInt(0, 100) / 100})`
 }
-//DOM TRAVERSING:
+
+
+//slider:
+
+const leftButton = document.querySelector('.slider__btn--left')
+const rightButton = document.querySelector('.slider__btn--right')
+const slides = document.querySelectorAll('.slide');
+const dotsContainer = document.querySelector('.dots')
+
+const createDots = () => {
+  slides.forEach((_, i) => {
+    dotsContainer.insertAdjacentHTML('beforeend', `<button class="dots__dot" data-slide="${i}"></button>`)
+  })
+  dotsContainer.addEventListener('click', (e)=>{
+    if (!e.target.classList.contains('dots__dot')) return;
+    const slideIndex = e.target.dataset.slide;
+    goToSlide(slideIndex)
+
+  })
+}
+let currentSlide = 0;
+function goToSlide(number) {
+  // console.log(slides[number]);
+  //let's set all values to the defaults ones:
+  currentSlide = number;
+  slides.forEach((elem, index) => (
+    elem.style.transform = `translateX(${(index-currentSlide) * 100}%)`
+  ))
+  console.log(dotsContainer)
+  //deactive all of dots:
+  console.log(document.querySelectorAll('.dots__dot'))
+  document.querySelectorAll('.dots__dot').forEach(dot=>{dot.classList.remove('dots__dot--active')});
+  document.querySelector(`.dots__dot[data-slide="${number}"]`).classList.add('dots__dot--active')
+  // dotsContainer.children.classList.remove('dots__dot--active')
+  //and activate only the needed one:
+  // dotsContainer.children[number].classList.add('dots__dots--active');
+}
+const nextSlide = () => {
+  currentSlide++;
+  currentSlide %= slides.length;
+  goToSlide(currentSlide)
+}
+const prevSlide = () => {
+  currentSlide = (currentSlide === 0) ? slides.length - 1 : currentSlide - 1;
+  goToSlide(currentSlide)
+   
+}
+createDots();
+goToSlide(0);
+leftButton.addEventListener('click', prevSlide)
+rightButton.addEventListener('click', nextSlide)
+
 
 // intersection observer API // scrolling effects:
 
@@ -99,14 +150,14 @@ const lazyOptions = {
 }
 const lazyCallback = (entries, observer) => {
   const [entry] = entries;
-  if(!entry.isIntersecting) return;
+  if (!entry.isIntersecting) return;
   console.log(entry)
   entry.target.src = entry.target.dataset.src;
-  entry.target.addEventListener('load', ()=>{entry.target.classList.remove('lazy-img')})
+  entry.target.addEventListener('load', () => { entry.target.classList.remove('lazy-img') })
   lazyObserver.unobserve(entry.target);
 }
 const lazyObserver = new IntersectionObserver(lazyCallback, lazyOptions)
-lazyImages.forEach(li=> lazyObserver.observe(li));
+lazyImages.forEach(li => lazyObserver.observe(li));
 
 //sticky navbar
 // window.addEventListener('scroll', (e)=>{
