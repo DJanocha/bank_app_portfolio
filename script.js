@@ -24,16 +24,16 @@ cookieMessage.classList.add('cookie-message');
 cookieMessage.innerHTML = `we use cookies for better analytics <button class="btn btn--close--cookie">OK</button>`;
 
 
-function changeOpacity(e){
+function changeOpacity(e) {
   if (!e.target.classList.contains('nav__link')) return;
   // console.log('contains')
   const closeNav = e.target.closest('.nav')
-  const siblings =closeNav.querySelectorAll('.nav__link');
+  const siblings = closeNav.querySelectorAll('.nav__link');
   const logo = closeNav.querySelector('.nav__logo');
-  const elements =[...siblings, logo]
-  elements.forEach((s)=>{
+  const elements = [...siblings, logo]
+  elements.forEach((s) => {
     // if(s!=e.target) 
-    if(e.target!== s) s.style.opacity=this;
+    if (e.target !== s) s.style.opacity = this;
   });
   // logo.style.opacity=0.5;
   // e.target.style.opacity=opacity
@@ -82,16 +82,16 @@ const closeModal = function () {
   overlay.classList.add('hidden');
 };
 const randomInt = (min, max) => {
-  return Math.floor(Math.random()*(max-min+1));
+  return Math.floor(Math.random() * (max - min + 1));
 }
-const generateRGB=()=>{
-  return `rgba(${randomInt(0,255)},${randomInt(0,255)},${randomInt(0,255)}, ${randomInt(0,100)/100})`
+const generateRGB = () => {
+  return `rgba(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)}, ${randomInt(0, 100) / 100})`
 }
 //DOM TRAVERSING:
 
 
 
-
+//sticky navbar
 
 //eventlisteners:
 // window.addEventListener('scroll', (e)=>{
@@ -109,16 +109,16 @@ const generateRGB=()=>{
 //   else navbar.classList.remove('sticky')
 // }) 
 /// or we can use intersection observer API:
-const obsCallback=(entries, observer)=>{
+const obsCallback = (entries, observer) => {
   // console.log(section1.getBoundingClientRect()); // it's inside IntersectionObserverEntry.boundingClientRect
   //console.log(section1.getClientRects()) // it gives same result as getBoundingClientRect()
   const [entry] = entries;
   const nav = document.querySelector('.nav');
-  if(!entry.isIntersecting) nav.classList.add('sticky')
+  if (!entry.isIntersecting) nav.classList.add('sticky')
   else nav.classList.remove('sticky')
-  entries.forEach(entry=>{console.log(entry)})
+  // entries.forEach(entry=>{console.log(entry)})
 }
-const obsOptions={
+const obsOptions = {
   root: null, //=> root=viewport
   threshold: 0,
   rootMargin: `-${document.querySelector('.nav').getBoundingClientRect().height}px`
@@ -127,18 +127,54 @@ const obsOptions={
 const observer = new IntersectionObserver(obsCallback, obsOptions);
 observer.observe(header);
 
+
+
+
+
+//reveal sections
+
+document.querySelectorAll('.section').forEach(el => {
+  el.classList.add('section--hidden')
+})
+
+const opaOptions = { // options needed to change the opacity
+  root: null,
+  threshold: 0.5
+}
+const opaCallBack = (entries, observer) => { // callback for changing the opacity in given sections
+  const [entry] = entries
+  console.log(entry)
+  // if (!entry.isIntersecting) return
+  entry.target.classList.remove('section--hidden')
+  observer.unobserve(entry.target)
+  //  if (entry.isIntersecting) return;
+  // entry.target.classList.remove('section--hidden')
+  // entry.classList.remove('section--hidden')
+
+}
+const opacityObserver = new IntersectionObserver(opaCallBack, opaOptions);
+
+document.querySelectorAll('.section').forEach(el => {
+  el.classList.add('section--hidden');
+  opacityObserver.observe(el)
+})
+
+
+
+
+
 document.querySelector('.nav').addEventListener('mouseover', changeOpacity.bind(0.5))
 document.querySelector('.nav').addEventListener('mouseout', changeOpacity.bind(1));
-tabsContainer.addEventListener('click', function(e){
-  const triggerer = e.target.classList.contains('btn')? e.target : e.target.closest('.operations__tab')
+tabsContainer.addEventListener('click', function (e) {
+  const triggerer = e.target.classList.contains('btn') ? e.target : e.target.closest('.operations__tab')
   if (!triggerer) return;
-  const index=triggerer.getAttribute('data-tab')
+  const index = triggerer.getAttribute('data-tab')
   console.log(index)
-  tabs.forEach((tab)=>{tab.classList.remove('operations__tab--active')})
-  operationsContents.forEach(oc=>{oc.classList.remove('operations__content--active')})
+  tabs.forEach((tab) => { tab.classList.remove('operations__tab--active') })
+  operationsContents.forEach(oc => { oc.classList.remove('operations__content--active') })
   document.querySelector(`.operations__tab--${index}`).classList.add('operations__tab--active')
   document.querySelector(`.operations__content--${index}`).classList.add('operations__content--active')
-  
+
 });
 
 // document.querySelectorAll('.nav__link').forEach(el=>{
@@ -151,14 +187,14 @@ tabsContainer.addEventListener('click', function(e){
 // })// here we create a lot of same functions, not the best solution. let's create one in parent element that knows
 //who(which chilid of him) is the event trigger (e.target) and use function that uses particular elem in event handling:
 
-document.querySelector('.nav__links').addEventListener('click', function(e){
+document.querySelector('.nav__links').addEventListener('click', function (e) {
   e.preventDefault();
   const triggerer = e.target;
   // console.log(triggerer);
-  if(!triggerer.classList.contains('nav__link')) return; // if it's not the kind of child we are looking for, don't continue the fn
+  if (!triggerer.classList.contains('nav__link')) return; // if it's not the kind of child we are looking for, don't continue the fn
   const dest = triggerer.getAttribute('href');
   // console.log(dest);
-  document.querySelector(dest).scrollIntoView({behavior: 'smooth'})
+  document.querySelector(dest).scrollIntoView({ behavior: 'smooth' })
 })
 
 
@@ -187,7 +223,7 @@ btnScrollTo.addEventListener('click', (e) => {
   const clientWidth = document.documentElement.clientWidth;
   const clientHeight = document.documentElement.clientHeight;
   const section1coords = e.target.getBoundingClientRect();
-//  section1.getBoundingClientRect();
+  //  section1.getBoundingClientRect();
 
   // `pageXOffset: ${window.pageXOffset}` // window.scrollX  is the same as window.pageXoffset and same with Y
   // `pageYOffset: ${window.pageYOffset}`
@@ -202,7 +238,7 @@ btnScrollTo.addEventListener('click', (e) => {
   //   behavior: 'smooth',
   // })
   //or even more modern approach using method:
-  section1.scrollIntoView({behavior:'smooth'})
+  section1.scrollIntoView({ behavior: 'smooth' })
 })
 
 
