@@ -89,11 +89,26 @@ const generateRGB = () => {
 }
 //DOM TRAVERSING:
 
+// intersection observer API // scrolling effects:
 
+const lazyImages = document.querySelectorAll('img[data-src]')
+const lazyOptions = {
+  root: null,
+  threshold: 0,
+  rootMargin: '-100px', // before we even reach the img, let's load it, so the user can't notice we're lazy loading
+}
+const lazyCallback = (entries, observer) => {
+  const [entry] = entries;
+  if(!entry.isIntersecting) return;
+  console.log(entry)
+  entry.target.src = entry.target.dataset.src;
+  entry.target.addEventListener('load', ()=>{entry.target.classList.remove('lazy-img')})
+  lazyObserver.unobserve(entry.target);
+}
+const lazyObserver = new IntersectionObserver(lazyCallback, lazyOptions)
+lazyImages.forEach(li=> lazyObserver.observe(li));
 
 //sticky navbar
-
-//eventlisteners:
 // window.addEventListener('scroll', (e)=>{
 //   const navbar = document.querySelector('.nav')
 //   // window.scrollY>100 && navbar.classList.add('sticky')
@@ -109,7 +124,7 @@ const generateRGB = () => {
 //   else navbar.classList.remove('sticky')
 // }) 
 /// or we can use intersection observer API:
-const obsCallback = (entries, observer) => {
+const navCallback = (entries, observer) => {
   // console.log(section1.getBoundingClientRect()); // it's inside IntersectionObserverEntry.boundingClientRect
   //console.log(section1.getClientRects()) // it gives same result as getBoundingClientRect()
   const [entry] = entries;
@@ -118,18 +133,14 @@ const obsCallback = (entries, observer) => {
   else nav.classList.remove('sticky')
   // entries.forEach(entry=>{console.log(entry)})
 }
-const obsOptions = {
+const navOptions = {
   root: null, //=> root=viewport
   threshold: 0,
   rootMargin: `-${document.querySelector('.nav').getBoundingClientRect().height}px`
 }
 
-const observer = new IntersectionObserver(obsCallback, obsOptions);
-observer.observe(header);
-
-
-
-
+const navObserver = new IntersectionObserver(navCallback, navOptions);
+navObserver.observe(header);
 
 //reveal sections
 
@@ -143,7 +154,7 @@ const opaOptions = { // options needed to change the opacity
 }
 const opaCallBack = (entries, observer) => { // callback for changing the opacity in given sections
   const [entry] = entries
-  console.log(entry)
+  // console.log(entry)
   // if (!entry.isIntersecting) return
   entry.target.classList.remove('section--hidden')
   observer.unobserve(entry.target)
